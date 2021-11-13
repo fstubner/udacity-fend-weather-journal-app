@@ -2,11 +2,7 @@
 // STUDENT-NOTE: It seems like really poor practice to ask students to
 // include an API key like this. It should probably be included
 // server-side via environment vars such as process.env.API_KEY.
-const apiVersion = 2.5
-const apiUnits = 'imperial';
-const apiKey = '033ee79214834232a0dc0465ee678a3e';
-const apiWeatherBaseUrl =
-    `http://api.openweathermap.org/data/${apiVersion}/weather`;
+const apiKey = '033ee79214834232a0dc0465ee678a3e&units=imperial';
 
 // Create a new date instance dynamically with JS
 let date = new Date();
@@ -22,7 +18,7 @@ document.getElementById('generate')
 */
 async function getWeatherByZip() {
     const zip = document.getElementById('zip').value;
-    await fetch(`${apiWeatherBaseUrl}?&appid=${apiKey}&zip=${zip}&units=${apiUnits}`)
+    await fetch(`http://api.openweathermap.org/data/2.5/weather?appid=${apiKey}&zip=${zip}`)
         .then(response => {
             if (!response.ok) {
                 throw `${response.status} (${response.statusText})`;
@@ -83,9 +79,9 @@ async function updateUI() {
         })
         .then(data => {
             console.log('Updating UI with data:\n', data)
-            document.getElementById('date').innerText = data.date;
-            document.getElementById('temp').innerText = `${Math.round(data.temp)}°F (${Math.round((data.temp - 32) * 5 / 9)}°C)`;
-            document.getElementById('content').innerText = data.content;
+            document.getElementById('date').innerHTML = data.date;
+            document.getElementById('temp').innerHTML = `${Math.round(data.temp)}°F`;
+            document.getElementById('content').innerHTML = data.content;
         })
         .catch(httpError => {
             console.error('An error occurred while communicating with the web server:\n', httpError);
